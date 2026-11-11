@@ -1,0 +1,29 @@
+# Common apt packages (both hosts). One per line, '#' comments allowed.
+# Core
+git
+stow
+curl
+# Desktop / window manager
+i3
+polybar
+rofi
+dunst
+feh
+xterm
+network-manager-gnome
+pulseaudio-utils
+x11-xserver-utils
+x11-xkb-utils
+i3lock
+scrot
+imagemagick
+# Shell
+fish
+fzf
+fd-find
+bat
+nala
+ruby
+# Editors / terminal tools
+tmux
+vim

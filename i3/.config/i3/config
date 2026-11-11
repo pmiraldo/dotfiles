@@ -1,0 +1,16 @@
+# i3 entrypoint config.
+# Split into focused includes for easier maintenance.
+set $mod Mod1
+
+include "config.d/00-base.conf"
+include "config.d/10-startup.conf"
+include "config.d/20-audio.conf"
+include "config.d/30-bindings.conf"
+include "config.d/40-workspaces.conf"
+include "config.d/50-session.conf"
+include "config.d/60-resize.conf"
+include "config.d/90-bar.conf"
+include "config.d/95-polybar.conf"
+
+# Host-specific settings (monitors, laptop keys, ...), installed by: ./install.sh <desktop|laptop>
+include "local.conf"

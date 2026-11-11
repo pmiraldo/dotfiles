@@ -1,0 +1,13 @@
+#!/usr/bin/env bash
+set -euo pipefail
+
+tmpbg="$(mktemp /tmp/lockscreen-XXXXXX.png)"
+
+scrot -z -F - | convert - \
+  -resize 25% \
+  -blur 0x6 \
+  -resize 400% \
+  "$tmpbg"
+
+i3lock -i "$tmpbg"
+rm -f "$tmpbg"

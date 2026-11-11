@@ -1,0 +1,3 @@
+# Laptop-only packages
+brightnessctl
+tlp

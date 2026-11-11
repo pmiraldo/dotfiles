@@ -1,0 +1,9 @@
+#include ".Xresources.local"
+
+xterm*background: black
+xterm*foreground: lightgray
+xterm*scrollBar: false
+xterm*rightScrollBar: false
+xterm*faceName:	MesloLGS NF
+xterm*faceSize:	11
+xterm*selectToClipboard: true

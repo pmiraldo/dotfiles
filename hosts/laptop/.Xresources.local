@@ -1,0 +1,2 @@
+! Laptop-specific X resources (installed by ./install.sh laptop)
+! Xft.dpi: 96
