@@ -12,10 +12,10 @@ are not available and prints a warning, but 26.04 has not been tested yet.
 sudo apt install git stow
 git clone <repo-url> ~/personal/dotfiles
 cd ~/personal/dotfiles
-./install.sh desktop      # or: ./install.sh laptop
+./install.py desktop      # or: ./install.py laptop
 ```
 
-`install.sh <host> [options]`:
+`install.py <host> [options]`:
 
 | Option        | Effect                                                   |
 |---------------|----------------------------------------------------------|
@@ -37,7 +37,7 @@ Afterwards log out and back in, or press `Mod+Shift+r` inside i3.
 
 ```
 dotfiles/
-├── install.sh
+├── install.py
 ├── packages/            apt.txt, apt-desktop.txt, apt-laptop.txt
 ├── i3/                  ~/.config/i3  (config + config.d/*.conf, scripts, wallpapers)
 ├── polybar/             ~/.config/polybar
@@ -60,7 +60,7 @@ Links are created per file (`--no-folding`), so files generated at runtime never
 - **polybar:** `config.ini` is shared and calls `scripts/nvidia.sh`. The desktop version reads two NVIDIA GPUs and the
   laptop has an empty stub. The DPI and wired/wireless settings in `config.ini` are desktop values, so adjust them for the laptop.
 
-To add a new host, create `hosts/<name>/` with `.config/i3/local.conf` and `.Xresources.local`, then run `./install.sh <name>`.
+To add a new host, create `hosts/<name>/` with `.config/i3/local.conf` and `.Xresources.local`, then run `./install.py <name>`.
 
 ## Manual steps
 
@@ -103,7 +103,7 @@ For the console and login screen, edit `/etc/default/keyboard`, then run `sudo d
 **NVIDIA (desktop).** Install the driver (`ubuntu-drivers install`) so that `nvidia-smi` works for the polybar module.
 
 **picom (optional).** There is no compositor config in this repo. If you want one, `sudo apt install picom`, add
-`picom/.config/picom/picom.conf`, and add `picom` to `SHARED_PACKAGES` in `install.sh`.
+`picom/.config/picom/picom.conf`, and add `picom` to `SHARED_PACKAGES` in `install.py`.
 
 ## Day-to-day use
 
@@ -114,7 +114,7 @@ git add -A && git commit
 
 # Track a new file: move it into the right package, then re-stow
 mv ~/.config/foo/foo.conf ~/personal/dotfiles/foo/.config/foo/foo.conf   # create dirs first
-./install.sh desktop --no-apt --no-extras
+./install.py desktop --no-apt --no-extras
 
 # Unlink one package
 stow --no-folding -D -d ~/personal/dotfiles -t "$HOME" i3

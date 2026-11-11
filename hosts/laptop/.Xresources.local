@@ -1,2 +1,2 @@
-! Laptop-specific X resources (installed by ./install.sh laptop)
+! Laptop-specific X resources (installed by ./install.py laptop)
 ! Xft.dpi: 96

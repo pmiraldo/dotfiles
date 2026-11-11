@@ -12,5 +12,5 @@ include "config.d/60-resize.conf"
 include "config.d/90-bar.conf"
 include "config.d/95-polybar.conf"
 
-# Host-specific settings (monitors, laptop keys, ...), installed by: ./install.sh <desktop|laptop>
+# Host-specific settings (monitors, laptop keys, ...), installed by: ./install.py <desktop|laptop>
 include "local.conf"
