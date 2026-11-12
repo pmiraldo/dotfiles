@@ -27,3 +27,6 @@ ruby
 # Editors / terminal tools
 tmux
 vim
+# Fonts (MesloLGS NF is tracked in fonts/)
+fonts-hack
+ttf-bitstream-vera

@@ -29,6 +29,8 @@ What it does:
    (packages unavailable on your Ubuntu version are skipped with a warning).
 2. Moves any existing conflicting file to `~/.dotfiles_backup/<timestamp>/`.
 3. Runs `stow --no-folding` for the shared packages, then for the host package. It is safe to run again.
+   The `fonts` package installs the MesloLGS NF fonts into `~/.fonts/` (used by polybar, xterm and the fish prompt),
+   and the font cache is refreshed afterwards.
 4. Bootstraps fisher (fish plugins), tpm (tmux plugins) and Vundle (vim plugins).
 
 Afterwards log out and back in, or press `Mod+Shift+r` inside i3.
@@ -65,10 +67,6 @@ To add a new host, create `hosts/<name>/` with `.config/i3/local.conf` and `.Xre
 ## Manual steps
 
 These are not automated, because they are not packaged in apt or need interaction.
-
-**Font.** Download the four *MesloLGS NF* `.ttf` files (Regular, Bold, Italic, Bold Italic) from
-<https://github.com/romkatv/powerlevel10k-media>, copy them to `~/.fonts/`, then run `fc-cache -fv`.
-The font is used by polybar, xterm and the fish prompt.
 
 **fish.**
 - `colorls` (used by the `ls` alias in `config.fish`): `gem install --user-install colorls`, and add the gem bin directory to `PATH`.

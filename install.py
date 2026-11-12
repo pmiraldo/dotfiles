@@ -15,7 +15,7 @@ from pathlib import Path
 
 REPO = Path(__file__).resolve().parent
 HOME = Path.home()
-SHARED = ["i3", "polybar", "fish", "tmux", "vim", "x11"]
+SHARED = ["i3", "polybar", "fish", "tmux", "vim", "x11", "fonts"]
 BACKUP = HOME / ".dotfiles_backup" / datetime.now().strftime("%Y%m%d-%H%M%S")
 
 
@@ -108,6 +108,10 @@ def main():
         stow(REPO, pkg)
     log(f"Linking host package: {args.host}")
     stow(REPO / "hosts", args.host)
+
+    if shutil.which("fc-cache"):
+        log("Refreshing font cache")
+        run("fc-cache", "-f", str(HOME / ".fonts"))
 
     if not args.no_extras:
         install_extras()
