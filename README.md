@@ -22,6 +22,7 @@ cd ~/personal/dotfiles
 | `--no-apt`    | do not install apt packages                              |
 | `--no-extras` | skip fisher / tpm / Vundle bootstrap (needs network)     |
 | `--chsh`      | make fish the login shell                                |
+| `--dpi N`     | set the host's screen dpi (see [Screen scaling](#screen-scaling-dpi)) |
 
 What it does:
 
@@ -43,13 +44,14 @@ dotfiles/
 ├── packages/            apt.txt, apt-desktop.txt, apt-laptop.txt
 ├── i3/                  ~/.config/i3  (config + config.d/*.conf, scripts, wallpapers)
 ├── polybar/             ~/.config/polybar
+├── fonts/               ~/.fonts (MesloLGS NF)
 ├── fish/                ~/.config/fish/{config.fish,fish_plugins}
 ├── tmux/                ~/.tmux.conf, ~/.tmux.conf.local
 ├── vim/                 ~/.vimrc
 ├── x11/                 ~/.Xresources (xterm), ~/.xinitrc, ~/.xsession
 └── hosts/
-    ├── desktop/         monitor layout, workspace-to-monitor pinning, NVIDIA bar module, 125 dpi
-    └── laptop/          placeholders (brightness keys, laptop monitor, dpi)
+    ├── desktop/         monitor layout, workspace-to-monitor pinning, NVIDIA bar module, 125 dpi (polybar 150)
+    └── laptop/          battery bar module, 150 dpi, placeholders (brightness keys, laptop monitor)
 ```
 
 Each top-level folder is a Stow package that mirrors `$HOME`, so `i3/.config/i3/config` becomes `~/.config/i3/config`.
@@ -59,10 +61,27 @@ Links are created per file (`--no-folding`), so files generated at runtime never
 
 - **i3:** `~/.config/i3/config` ends with `include "local.conf"`. That file comes from `hosts/<host>/`.
 - **X resources:** `~/.Xresources` includes `~/.Xresources.local`, also from `hosts/<host>/`.
-- **polybar:** `config.ini` is shared and calls `scripts/nvidia.sh`. The desktop version reads two NVIDIA GPUs and the
-  laptop has an empty stub. The DPI and wired/wireless settings in `config.ini` are desktop values, so adjust them for the laptop.
+- **polybar:** `config.ini` is shared and includes `~/.config/polybar/host.ini`, which comes from `hosts/<host>/`. That file
+  defines `[host] dpi` and `modules-right` (the laptop adds the `battery` module after the volume, and may need its
+  `battery`/`adapter` names checked with `ls /sys/class/power_supply`). `scripts/nvidia.sh` reads two NVIDIA GPUs on the
+  desktop and is an empty stub on the laptop. The wired/wireless settings in `config.ini` are desktop values.
 
-To add a new host, create `hosts/<name>/` with `.config/i3/local.conf` and `.Xresources.local`, then run `./install.py <name>`.
+To add a new host, create `hosts/<name>/` with `.config/i3/local.conf`, `.Xresources.local` and `.config/polybar/host.ini`
+(copy the laptop ones), then run `./install.py <name>`.
+
+### Screen scaling (dpi)
+
+Text size comes from two values per host, which `./install.py <host> --dpi N` writes into `hosts/<host>/`:
+
+- `Xft.dpi` in `.Xresources.local`: used by xterm, the i3 font (pango), gvim, GTK apps and browsers.
+- `dpi` in `.config/polybar/host.ini`: polybar ignores `Xft.dpi` when it has its own value.
+
+Use the same number for both (4K laptop at 1.5x: 144 or 150). `Mod+Shift+r` reloads `~/.Xresources` into the X server, but
+xterm reads it only at startup, so open a new xterm afterwards. Sizes in pixels (i3 gaps, the polybar font offset) do not
+scale and may need tuning. This does not change the xdm login screen, which has its own dpi in `/etc/X11/xdm/`.
+
+Polybar shortcuts in i3: `Mod+Shift+b` light theme, `Mod+Shift+n` dark theme, `Mod+Shift+m` compact polybar
+(dpi, font and padding at 75%), `Mod+Shift+p` back to normal scale.
 
 ## Manual steps
 
