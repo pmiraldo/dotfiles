@@ -9,7 +9,10 @@ if [ ! -f "${BASE_CFG}" ]; then
   exit 1
 fi
 
-perl -0pe '
+# polybar cannot do arithmetic, so resolve ${host.dpi} to its number first
+HOST_DPI="$(sed -n 's/^dpi *= *\([0-9.]*\).*/\1/p' "${HOME}/.config/polybar/host.ini" | head -1)"
+HOST_DPI="${HOST_DPI:-96}" perl -0pe '
+  s/^(\s*dpi\s*=\s*)\$\{host\.dpi\}/$1$ENV{HOST_DPI}/m;
   sub fmt {
     my ($n) = @_;
     return "0" if abs($n) < 1e-9;

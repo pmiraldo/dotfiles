@@ -5,8 +5,10 @@ Usage: ./install.py <host> [--no-apt] [--no-extras] [--chsh]
   --no-apt     skip installing apt packages
   --no-extras  skip fisher / tpm / Vundle bootstrap (needs network)
   --chsh       make fish the login shell
+  --dpi N      set the host's screen dpi (Xft.dpi and polybar) before linking
 """
 import argparse
+import re
 import shutil
 import subprocess
 import sys
@@ -47,6 +49,21 @@ def install_apt(host):
     if skipped:
         print(f"Warning: not available on this Ubuntu, skipped: {' '.join(skipped)}")
     run("sudo", "apt-get", "install", "-y", *available)
+
+
+def set_dpi(host, dpi):
+    """Write the dpi into the host's Xft.dpi and polybar host.ini (tracked in the repo)."""
+    for rel, pat, new in [
+        (".Xresources.local", r"^[!#]?\s*Xft\.dpi:.*$", f"Xft.dpi: {dpi}"),
+        (".config/polybar/host.ini", r"^dpi\s*=.*$", f"dpi = {dpi}"),
+    ]:
+        f = REPO / "hosts" / host / rel
+        text = f.read_text() if f.exists() else ""
+        text, n = re.subn(pat, new, text, flags=re.M)
+        if not n:
+            sys.exit(f"No dpi setting to update in {f}")
+        f.write_text(text)
+        print(f"{f.relative_to(REPO)}: {new}")
 
 
 def backup_conflicts(stow_dir, pkg):
@@ -96,7 +113,12 @@ def main():
     ap.add_argument("--no-apt", action="store_true", help="skip installing apt packages")
     ap.add_argument("--no-extras", action="store_true", help="skip fisher / tpm / Vundle bootstrap")
     ap.add_argument("--chsh", action="store_true", help="make fish the login shell")
+    ap.add_argument("--dpi", type=int, help="set the host's screen dpi (Xft.dpi and polybar)")
     args = ap.parse_args()
+
+    if args.dpi:
+        log(f"Setting dpi to {args.dpi} for {args.host}")
+        set_dpi(args.host, args.dpi)
 
     if not args.no_apt:
         install_apt(args.host)
